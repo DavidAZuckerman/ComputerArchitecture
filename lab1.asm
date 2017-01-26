@@ -10,10 +10,12 @@
 #inputString2: .space 64
 firstNumPrompt: .asciiz "Enter first number: "
 secondNumPrompt: .asciiz "Enter second number: "
-operationPrompt: .asciiz "Operation: "
+operationPrompt: .asciiz "Operation (enter 1 for +, 2 for -, 3 for *, and 4 for /):"
 display: .asciiz "Ans: "
-remainderDisplay: .asciiz "Remainder:  "
-reinitializingDisplay: .asciiz "Reinitializing.... "
+hiBitDisplay: .asciiz "\nHigh bits: "
+loBitDisplay: .asciiz "\nLow bits: "
+remainderDisplay: .asciiz "\nRemainder:  "
+reinitializingDisplay: .asciiz "\nReinitializing.... \n"
 errorDisplay: .asciiz "Invalid input for operation"
 .text			# What follows will be actual code
 main: 
@@ -94,16 +96,21 @@ subtraction:
 	j main
 	
 multiplication:
-	mult $t8, $t9 #multiply input two and input one
-	# Print "Ans: " to console
-	la	$a0, display	
+	mult $t8, $t9 # multiply input two and input one
+	# Print "Low bits: " to console
+	la	$a0, loBitDisplay	
 	li	$v0, 4
 	syscall
-	# Print the result of the multiplication to console
-	mfhi	$a0
+	# Print the low bits of the multiplication to console
+	mflo	$a0
 	li	$v0, 1
 	syscall
-	mflo	$a0
+	# Print "High bits: " to console
+	la	$a0, hiBitDisplay	
+	li	$v0, 4
+	syscall
+	# Print the high bits of the multiplication to console
+	mfhi	$a0
 	li	$v0, 1
 	syscall
 	# Print "Reinitializing... " to console
