@@ -12,6 +12,9 @@ firstNumPrompt: .asciiz "Enter first number: "
 secondNumPrompt: .asciiz "Enter second number: "
 operationPrompt: .asciiz "Operation: "
 display: .asciiz "Ans: "
+remainderDisplay: .asciiz "Remainder:  "
+reinitializingDisplay: .asciiz "Reinitializing.... "
+errorDisplay: .asciiz "Invalid input for operation"
 .text			# What follows will be actual code
 main: 
 	# Display firstNumPrompt
@@ -49,31 +52,90 @@ main:
 	la $t3, 3 # multiplication
 	la $t4, 4 # division
 	beq $t0, $t1, addition #check if the user wants to add
-	beq $t0, $t2, subtratction #check if the user wants to subtract
+	beq $t0, $t2, subtraction #check if the user wants to subtract
 	beq $t0, $t3, multiplication #check if the user wants to multiply
 	beq $t0, $t4, division #check if the user wants to divide
+	# Print invalid operation error to console
+	la	$a0, errorDisplay	
+	li	$v0, 4
+	syscall
+	j main
 		
 addition:
 	add $t5, $t8, $t9 #add inputs one and two
-	
-	
-
-subtraction:
-
-multiplication:
-
-division:
-	
-			
-	
-printResult:					
-	# Print "You typed: " to console
+	# Print "Ans: " to console
 	la	$a0, display	
 	li	$v0, 4
 	syscall
-	# Print the entered string to console
-	la	$a0, inputString
+	# Print the result of the addition to console
+	move	$a0, $t5
+	li	$v0, 1
+	syscall
+	# Print "Reinitializing... " to console
+	la	$a0, reinitializingDisplay	
 	li	$v0, 4
 	syscall
+	j main
+
+subtraction:
+	sub $t5, $t8, $t9 #subtract input two from input one
+	# Print "Ans: " to console
+	la	$a0, display	
+	li	$v0, 4
+	syscall
+	# Print the result of the subtraction to console
+	move	$a0, $t5
+	li	$v0, 1
+	syscall
+	# Print "Reinitializing... " to console
+	la	$a0, reinitializingDisplay	
+	li	$v0, 4
+	syscall
+	j main
+	
+multiplication:
+	mult $t8, $t9 #multiply input two and input one
+	# Print "Ans: " to console
+	la	$a0, display	
+	li	$v0, 4
+	syscall
+	# Print the result of the multiplication to console
+	mfhi	$a0
+	li	$v0, 1
+	syscall
+	mflo	$a0
+	li	$v0, 1
+	syscall
+	# Print "Reinitializing... " to console
+	la	$a0, reinitializingDisplay	
+	li	$v0, 4
+	syscall
+	j main
+
+division:
+	div $t8, $t9 #divide input one by input two
+	# Print "Ans: " to console
+	la	$a0, display	
+	li	$v0, 4
+	syscall
+	# Print the quotient of the division to console
+	mflo	$a0
+	li	$v0, 1
+	syscall
+	# Print "Remainder: " to console
+	la	$a0, remainderDisplay	
+	li	$v0, 4
+	syscall
+	# Print the remainder of the division to console
+	mfhi	$a0
+	li	$v0, 1
+	syscall
+	# Print "Reinitializing... " to console
+	la	$a0, reinitializingDisplay	
+	li	$v0, 4
+	syscall
+	j main
+			
+
 	
 	
