@@ -7,7 +7,6 @@ ansDisplay: .asciiz "Ans: "
 hiBitDisplay: .asciiz "\nHigh bits: "
 loBitDisplay: .asciiz "\nLow bits: "
 remainderDisplay: .asciiz "\nRemainder:  "
-reinitializingDisplay: .asciiz "\nReinitializing.... \n"
 errorDisplay: .asciiz "Invalid input for operation"
 .text			# What follows will be actual code
 main: 
@@ -65,10 +64,6 @@ addition:
 	move	$a0, $t5
 	li	$v0, 1
 	syscall
-	# Print "Reinitializing... " to console
-	la	$a0, reinitializingDisplay	
-	li	$v0, 4
-	syscall
 	j main
 
 subtraction:
@@ -80,10 +75,6 @@ subtraction:
 	# Print the result of the subtraction to console
 	move	$a0, $t5
 	li	$v0, 1
-	syscall
-	# Print "Reinitializing... " to console
-	la	$a0, reinitializingDisplay	
-	li	$v0, 4
 	syscall
 	j main
 	
@@ -105,10 +96,6 @@ multiplication:
 	mfhi	$a0
 	li	$v0, 1
 	syscall
-	# Print "Reinitializing... " to console
-	la	$a0, reinitializingDisplay	
-	li	$v0, 4
-	syscall
 	j main
 
 division:
@@ -128,10 +115,6 @@ division:
 	# Print the remainder of the division to console
 	mfhi	$a0
 	li	$v0, 1
-	syscall
-	# Print "Reinitializing... " to console
-	la	$a0, reinitializingDisplay	
-	li	$v0, 4
 	syscall
 	j main
 			
