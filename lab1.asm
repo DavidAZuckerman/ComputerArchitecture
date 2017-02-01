@@ -1,17 +1,9 @@
-# This program takes an input string from user and print it to the console
-# Procedure:
-# 1. Create a buffer ("inputString" in this case) to store the input string
-# 2. Load the address of the buffer to register $a0
-# 3. Load the length of the buffer to register $a1
-# 4. Load register $v0 with 8
-# 5. Issue "syscall"
+# This program takes two integers and an int from 1-4 corresponding to an operation, performs the operation on the two ints, and prints the result
 .data			# What follows will be data
-#inputString1: .space 64	 set aside 64 bytes to store the input string
-#inputString2: .space 64
 firstNumPrompt: .asciiz "Enter first number: "
 secondNumPrompt: .asciiz "Enter second number: "
 operationPrompt: .asciiz "Operation (enter 1 for +, 2 for -, 3 for *, and 4 for /):"
-display: .asciiz "Ans: "
+ansDisplay: .asciiz "Ans: "
 hiBitDisplay: .asciiz "\nHigh bits: "
 loBitDisplay: .asciiz "\nLow bits: "
 remainderDisplay: .asciiz "\nRemainder:  "
@@ -20,7 +12,7 @@ errorDisplay: .asciiz "Invalid input for operation"
 .text			# What follows will be actual code
 main: 
 	# Display firstNumPrompt
-	la	$a0, firstNumPrompt	# display the prompt to begin
+	la	$a0, firstNumPrompt	# display the prompt to enter the first number
 	li	$v0, 4	# system call code to print a string to console
 	syscall
 	
@@ -30,7 +22,7 @@ main:
 	move	$t8, $v0
 	
 	# Display secondNumPrompt
-	la	$a0, secondNumPrompt	# display the prompt to begin
+	la	$a0, secondNumPrompt	# display the prompt to enter the second number
 	li	$v0, 4	# system call code to print a string to console
 	syscall
 	
@@ -40,7 +32,7 @@ main:
 	move	$t9, $v0	
 	
 	# Display operationPrompt
-	la	$a0, operationPrompt	# display the prompt to begin
+	la	$a0, operationPrompt	# display the prompt to enter a number corresponding to an operation
 	li	$v0, 4	# system call code to print a string to console
 	syscall	
 			
@@ -66,7 +58,7 @@ main:
 addition:
 	add $t5, $t8, $t9 #add inputs one and two
 	# Print "Ans: " to console
-	la	$a0, display	
+	la	$a0, ansDisplay	
 	li	$v0, 4
 	syscall
 	# Print the result of the addition to console
@@ -82,7 +74,7 @@ addition:
 subtraction:
 	sub $t5, $t8, $t9 #subtract input two from input one
 	# Print "Ans: " to console
-	la	$a0, display	
+	la	$a0, ansDisplay	
 	li	$v0, 4
 	syscall
 	# Print the result of the subtraction to console
@@ -122,7 +114,7 @@ multiplication:
 division:
 	div $t8, $t9 #divide input one by input two
 	# Print "Ans: " to console
-	la	$a0, display	
+	la	$a0, ansDisplay	
 	li	$v0, 4
 	syscall
 	# Print the quotient of the division to console
